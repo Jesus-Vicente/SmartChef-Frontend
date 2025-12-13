@@ -1,0 +1,103 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="clear" class="toolbar-transparente">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/main" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button color="light">
+        <ion-icon slot="icon-only" name="heart-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <div class="imagen-portada-contenedor">
+    <ion-img src="{{receta.id_foto}}" class="imagen-portada"></ion-img>
+    <div class="titulo-overlay">
+      <h1 class="receta-title">{{receta.nombre}}</h1>
+      <div class="rating-bar">
+        <ion-icon name="star"></ion-icon>
+        {{ receta.valoracion_promedio }}
+      </div>
+    </div>
+  </div>
+
+  <ion-card class="metadatos-card ion-no-margin">
+    <div class="metadatos-grid">
+
+      <div class="metadato-item">
+        <ion-icon name="time-outline"></ion-icon>
+        <span>{{ receta.tiempo_preparacion }} min</span>
+        <p>Tiempo</p>
+      </div>
+
+      <div class="metadato-item">
+        <ion-icon name="fast-food-outline"></ion-icon>
+        <span>{{ receta.porciones }}</span>
+        <p>Porciones</p>
+      </div>
+
+      <div class="metadato-item">
+        <ion-icon name="difficulty-icon"></ion-icon>
+        <span>{{ receta.dificultad }}</span>
+        <p>Dificultad</p>
+      </div>
+
+    </div>
+  </ion-card>
+
+  <ion-card class="section-card ion-no-margin">
+    <ion-card-header>
+      <ion-card-title>Descripción General</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p class="descripcion-texto">{{ receta.descripcion_general }}</p>
+
+      <div class="chips-filtros-detalle">
+        <ion-chip *ngIf="receta.vegetariano" color="success">
+          <ion-icon name="leaf-outline"></ion-icon>
+          <ion-label>Vegetariano</ion-label>
+        </ion-chip>
+        <ion-chip *ngIf="receta.sin_gluten">
+          <ion-label>Sin Gluten</ion-label>
+        </ion-chip>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="section-card ion-no-margin">
+    <ion-card-header>
+      <ion-card-title>Ingredientes</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list lines="full">
+        <ion-item *ngFor="let ing of receta.ingredientes" class="ingrediente-item">
+          <ion-label>{{ ing.nombre }}</ion-label>
+          <ion-note slot="end">{{ ing.cantidad }}</ion-note>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="section-card ion-no-margin">
+    <ion-card-header>
+      <ion-card-title>Preparación</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list lines="full">
+        <ion-item *ngFor="let paso of receta.preparacion; let i = index" class="paso-item">
+          <ion-label class="paso-label" text-wrap>
+            <p class="paso-numero">Paso {{ i + 1 }}</p>
+            <p>{{ paso }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+
+  <div class="espacio-final"></div>
+
+</ion-content>

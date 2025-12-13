@@ -1,0 +1,73 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="success">
+    <ion-title>Mi Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <div class="avatar-area ion-text-center ion-padding">
+    <ion-icon name="person-circle-outline" size="large" color="success"></ion-icon>
+    <h2>¡Hola, {{ datosUsuario.nombre }}!</h2>
+    <p>ID de usuario: {{ datosUsuario.id }}</p>
+  </div>
+
+  <ion-card class="datos-card">
+    <ion-card-header>
+      <ion-card-title>Información de la Cuenta</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Nombre Completo</ion-label>
+        <ion-label class="dato-valor">{{ datosUsuario.nombre }}</ion-label>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Correo Electrónico</ion-label>
+        <ion-label class="dato-valor">{{ datosUsuario.email }}</ion-label>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Teléfono</ion-label>
+        <ion-label class="dato-valor">{{ datosUsuario.telefono }}</ion-label>
+      </ion-item>
+
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="datos-card">
+    <ion-card-header>
+      <ion-card-title>Dirección</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Dirección Completa</ion-label>
+        <ion-label class="dato-valor">{{ datosUsuario.direccion }}</ion-label>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Ciudad y Código Postal</ion-label>
+        <ion-label class="dato-valor">{{ datosUsuario.ciudad }} ({{ datosUsuario.codigo_postal }})</ion-label>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">País</ion-label>
+        <ion-label class="dato-valor">{{ datosUsuario.pais }}</ion-label>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Miembro desde</ion-label>
+        <ion-label class="dato-valor">{{ datosUsuario.fecha_registro | date: 'mediumDate' }}</ion-label>
+      </ion-item>
+
+    </ion-card-content>
+  </ion-card>
+
+
+  <ion-button expand="block" color="danger" class="ion-margin-top" (click)="cerrarSesion()">
+    CERRAR SESIÓN
+  </ion-button>
+
+</ion-content>

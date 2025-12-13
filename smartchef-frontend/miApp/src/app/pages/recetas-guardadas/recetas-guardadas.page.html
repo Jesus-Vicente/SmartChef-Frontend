@@ -1,0 +1,92 @@
+<ion-header [translucent]="true">
+  <div class="segment-container">
+    <ion-segment [(ngModel)]="segmentoSeleccionado" mode="md">
+      <ion-segment-button value="favoritos">
+        <ion-label>FAVORITOS</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="colecciones">
+        <ion-label>COLECCIONES</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <div [hidden]="segmentoSeleccionado !== 'favoritos'">
+    <ion-card class="listado-card favoritos-list">
+      <ion-card-header>
+        <ion-card-title>Recetas Favoritas</ion-card-title>
+      </ion-card-header>
+      <ion-card-content class="ion-no-padding">
+
+        <ion-list lines="none" *ngIf="recetasFavoritas.length > 0">
+          <ion-item button detail="true" *ngFor="let receta of recetasFavoritas" (click)="verDetalleReceta(receta.id)">
+
+            <div slot="start" class="start-icon-wrapper">
+              <ion-icon name="heart" color="danger"></ion-icon>
+            </div>
+
+            <ion-label class="ion-text-wrap">
+              <h3>{{ receta.nombre }}</h3>
+              <div class="metadatos-line">
+                <ion-icon name="time-outline"></ion-icon>
+                <ion-note>{{ receta.tiempo_preparacion }} min</ion-note>
+
+                <ion-note class="fecha-guardado">
+                  Guardado: {{ receta.fecha_guardado | date: 'shortDate' }}
+                </ion-note>
+              </div>
+            </ion-label>
+
+          </ion-item>
+        </ion-list>
+
+        <div *ngIf="recetasFavoritas.length === 0" class="mensaje-vacio ion-padding">
+          <p>Aún no tienes recetas marcadas como favoritas.</p>
+          <ion-button fill="solid" color="success">Buscar Recetas</ion-button>
+        </div>
+
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <div [hidden]="segmentoSeleccionado !== 'colecciones'">
+    <ion-card class="listado-card colecciones-list">
+      <ion-card-header>
+        <ion-card-title>Colecciones Personalizadas</ion-card-title>
+      </ion-card-header>
+      <ion-card-content class="ion-no-padding">
+
+        <ion-list lines="full" *ngIf="misColecciones.length > 0">
+          <ion-item button detail="false" *ngFor="let coleccion of misColecciones" (click)="verColeccion(coleccion.id, coleccion.nombreColeccion)">
+
+            <ion-icon name="folder-outline" slot="start" color="success"></ion-icon>
+
+            <ion-label>
+              <h3>{{ coleccion.nombreColeccion }}</h3>
+              <p>{{ coleccion.descripcion }}</p>
+            </ion-label>
+            <ion-note slot="end" class="cantidad-recetas">
+              {{ coleccion.cantidadRecetas }} Recetas
+            </ion-note>
+            <ion-icon name="chevron-forward-outline" slot="end" color="medium"></ion-icon>
+          </ion-item>
+        </ion-list>
+
+        <div *ngIf="misColecciones.length === 0" class="mensaje-vacio ion-padding">
+          <p>Crea tu primera colección para organizar tus recetas.</p>
+          <ion-button expand="block" fill="solid" color="success" (click)="crearNuevaColeccion()">Crear Nueva Colección</ion-button>
+        </div>
+
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <ion-fab *ngIf="segmentoSeleccionado === 'colecciones' && misColecciones.length > 0" slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button color="success" (click)="crearNuevaColeccion()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

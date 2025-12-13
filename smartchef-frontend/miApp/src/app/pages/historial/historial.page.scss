@@ -1,0 +1,85 @@
+/* Estilos base: Fondo de página claro */
+ion-content {
+  --background: #f0ffef;
+}
+
+/* 1. Estilo de la tarjeta de Calendario */
+.calendario-card {
+  --background: #e0fddc; /* Fondo de tarjeta claro/lima */
+  margin: 16px 10px;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.calendario-card ion-card-title {
+  color: #2a4f2e; /* Verde oscuro para el título */
+  font-weight: 600;
+  padding-bottom: 5px;
+}
+
+/* Estilo del placeholder visual del calendario */
+.calendar-placeholder {
+  padding: 20px 0;
+  border: 1px dashed #c8e6c9;
+  border-radius: 10px;
+}
+
+.calendar-placeholder p {
+  color: #777;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+/* 2. Estilo de la tarjeta de la Lista de Historial */
+.historial-list-card {
+  --background: #e0fddc; /* Fondo de tarjeta claro/lima */
+  margin: 16px 10px;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.historial-list-card ion-card-title {
+  color: #2a4f2e;
+  font-weight: 600;
+}
+
+/* 3. Estilos de los ítems del historial */
+ion-list {
+  background: transparent;
+}
+
+ion-item {
+  --background: transparent;
+  --min-height: 55px;
+  --padding-start: 0;
+  border-bottom: 1px solid #c8e6c9;
+}
+
+ion-item h3 {
+  color: #2a2a2a; /* Nombre de la receta oscuro */
+  font-weight: 600;
+  margin: 0;
+}
+
+ion-item p {
+  color: #777; /* Fecha en gris suave */
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Quitamos el borde del último item */
+ion-item:last-child {
+  border-bottom: none;
+}
+
+/* Estilos de los chips de estado */
+ion-chip {
+  font-weight: bold;
+}
+
+/* Mensaje vacío */
+.mensaje-vacio {
+  text-align: center;
+  padding: 30px 20px;
+  color: #777;
+}

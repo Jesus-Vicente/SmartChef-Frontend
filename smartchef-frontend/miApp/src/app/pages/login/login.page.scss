@@ -1,0 +1,75 @@
+ion-content.login-page {
+  --background: url('../../../assets/imagenes/fondo/foto-fondo-movil.png') no-repeat center bottom / cover !important;
+  --ion-background-color: transparent;
+}
+
+/* Centrar contenido */
+.login-page::part(scroll) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/*  Animación del fondo */
+.login-page.animate-fondo {
+  animation: elevarFondo 2.5s ease forwards;
+}
+
+@keyframes elevarFondo {
+  from {
+    background-position: center center;
+  }
+  to {
+    background-position: center 80%;
+  }
+}
+
+/* Logo */
+.logo {
+  margin-bottom: 2rem;
+}
+
+.logo img {
+  width: 10rem;
+  height: auto;
+}
+
+/*  Responsive Móvil */
+@media (max-width: 540px) {
+
+  .login-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding: 1.5rem;
+  }
+
+  .items {
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+    border-radius: 1rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+    backdrop-filter: blur(8px);
+  }
+
+  .items ion-item {
+    --background: #e0f2f1;
+    --ion-item-background: #e0f2f1;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .items ion-label {
+    color: #00796b;
+    font-size: 1.2rem;
+  }
+
+  .items ion-input {
+    color: #004d40;
+  }
+}

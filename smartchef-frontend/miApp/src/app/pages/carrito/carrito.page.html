@@ -1,0 +1,45 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="success">
+    <ion-title>Lista de Compras</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <ion-card class="lista-card">
+    <ion-card-header>
+      <ion-card-title>Lista de Compras Actual</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+
+      <ion-item class="input-agregar">
+        <ion-input label="Añadir ingrediente" labelPlacement="stacked" placeholder="ej. 1kg de tomate" [(ngModel)]="nuevoIngrediente" (keyup.enter)="agregarIngrediente()"></ion-input>
+        <ion-button slot="end" fill="solid" color="success" (click)="agregarIngrediente()" [disabled]="!nuevoIngrediente">Añadir</ion-button>
+      </ion-item>
+
+      <h4 class="ion-padding-top" *ngIf="listaCompra.length > 0">Ingredientes:</h4>
+
+      <ion-list lines="none">
+        <ion-item *ngFor="let item of listaCompra; let i = index">
+          <ion-label class="ion-text-wrap" [class.comprado]="item.comprado">{{ item.nombre }}</ion-label>
+          <ion-checkbox slot="start" [(ngModel)]="item.comprado" color="success"></ion-checkbox>
+          <ion-button slot="end" fill="clear" color="danger" (click)="eliminarIngrediente(i)">
+            <ion-icon name="close-circle-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-list>
+
+      <div *ngIf="listaCompra.length === 0" class="mensaje-vacio">
+        <p>Tu lista de compras está vacía.</p>
+        <p>Añade ingredientes manualmente o desde una receta.</p>
+      </div>
+
+    </ion-card-content>
+  </ion-card>
+
+  <ion-button expand="block" routerLink="/main" color="success" class="ion-margin-top" [disabled]="listaCompra.length === 0">
+    <ion-icon name="cash-outline" slot="start"></ion-icon>
+    Comprar lista
+  </ion-button>
+
+</ion-content>

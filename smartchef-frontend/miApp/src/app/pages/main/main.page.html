@@ -1,0 +1,92 @@
+<ion-content [fullscreen]="true">
+
+  <ion-header>
+    <div class="searchbar-contenedor">
+      <app-search-bar (searchChange)="onSearchChanged($event)"></app-search-bar>
+    </div>
+  </ion-header>
+
+  <div class="contenedor-main">
+
+    <ion-card *ngFor="let receta of recetas" (click)="irADetalleReceta(receta.id)">
+
+      <div class="imagen-contenedor">
+        <ion-img src="{{receta.id_foto}}" class="imagen-receta"></ion-img>
+
+        <ion-button
+          slot="end"
+          fill="clear"
+          size="large"
+          class="opciones-receta-btn"
+          color="light"
+          (click)="openActionMenu($event, receta.id)">
+          <ion-icon name="ellipsis-vertical" slot="icon-only"></ion-icon>
+        </ion-button>
+      </div>
+
+      <div class="card-footer-details">
+
+        <div class="metadatos-receta">
+
+          <div class="metadato-item">
+            <ion-icon name="time-outline"></ion-icon>
+            <span>{{ receta.tiempo_preparacion }} min</span>
+          </div>
+
+          <div class="metadato-item">
+            <ion-icon name="star"></ion-icon>
+            <span>{{ receta.valoracion_promedio }}</span>
+          </div>
+
+          <div class="metadato-item dificultad">
+            <span class="chip-dificultad">{{ receta.dificultad }}</span>
+          </div>
+        </div>
+
+        <ion-card-header class="ion-no-padding">
+          <ion-card-title>{{receta.nombre}}</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content class="ion-no-padding">
+          <div class="filtros-receta">
+            <span *ngIf="receta.vegetariano" class="filtro-chip chip-vegetariano">Vegetariano</span>
+            <span *ngIf="receta.sin_gluten" class="filtro-chip chip-gluten">Sin Gluten</span>
+            <span *ngIf="receta.comida_rapida" class="filtro-chip chip-rapida">Rápida</span>
+            <span *ngIf="receta.economico" class="filtro-chip chip-economico">Económico</span>
+          </div>
+        </ion-card-content>
+      </div>
+    </ion-card>
+  </div>
+</ion-content>
+
+<ion-footer class="footer-menu">
+
+  <div class="boton-central">
+    <ion-fab-button color="success" (click)="irA('agregar-receta')">
+      <img src="../../../assets/imagenes/iconos-menu-inferior/add-circle-outline.svg" alt="Añadir" class="icon-add" />
+    </ion-fab-button>
+  </div>
+
+  <ion-toolbar>
+    <div class="botones-menu-inferior">
+      <ion-button fill="clear" slot="end" (click)="irA('recetas-guardadas')">
+        <img src="../../../assets/imagenes/iconos-menu-inferior/archive-outline.svg" alt="Guardar" class="icon-img" />
+      </ion-button>
+
+      <ion-button fill="clear" slot="end" (click)="irA('carrito')">
+        <img src="../../../assets/imagenes/iconos-menu-inferior/cart-outline.svg" alt="Carrito" class="icon-img" />
+      </ion-button>
+
+      <div class="espacio-centro"></div>
+
+      <ion-button fill="clear" slot="end" (click)="irA('historial')">
+        <img src="../../../assets/imagenes/iconos-menu-inferior/calendar-outline.svg" alt="Historial" class="icon-img" />
+      </ion-button>
+
+      <ion-button fill="clear" slot="end" (click)="irA('perfil')">
+        <img src="../../../assets/imagenes/iconos-menu-inferior/person-circle-outline.svg" alt="Perfil" class="icon-img" />
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

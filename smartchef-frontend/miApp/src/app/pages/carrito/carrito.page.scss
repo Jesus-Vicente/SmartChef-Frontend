@@ -1,0 +1,81 @@
+/* Estilos base: Fondo de página claro */
+ion-content {
+  --background: #f0ffef;
+}
+
+/* Estilo de la tarjeta de Lista */
+.lista-card {
+  --background: #e0fddc; /* Fondo de tarjeta claro/lima */
+  margin: 0; /* Sin margen superior/inferior ya que está dentro del padding del content */
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.lista-card ion-card-title {
+  color: #2a4f2e; /* Verde oscuro para el título */
+  font-weight: 600;
+}
+
+h4 {
+  color: #0f5132;
+  font-weight: 700;
+  margin-top: 15px;
+}
+
+/* Estilo del ítem para agregar ingredientes */
+.input-agregar ion-item {
+  --background: transparent;
+  border-bottom: 1px solid #c8e6c9;
+}
+
+.input-agregar ion-label {
+  color: #0f5132;
+  font-weight: 600;
+}
+
+.input-agregar ion-input {
+  color: #2a2a2a;
+}
+
+.input-agregar ion-button {
+  height: 40px;
+}
+
+/* Estilo de los ítems de la lista de compras */
+ion-list {
+  background: transparent;
+}
+
+ion-item {
+  --background: transparent;
+  --min-height: 45px;
+  padding-right: 0;
+  border-bottom: 1px solid #c8e6c9;
+}
+
+ion-item:last-child {
+  border-bottom: none;
+}
+
+ion-item ion-label {
+  color: #2a2a2a; /* Texto del ingrediente oscuro */
+  font-size: 1rem;
+}
+
+/* Estilo para los ítems marcados como comprados */
+.comprado {
+  text-decoration: line-through;
+  color: #777 !important;
+  font-style: italic;
+}
+
+/* Mensaje cuando la lista está vacía */
+.mensaje-vacio {
+  text-align: center;
+  padding: 30px 0;
+  color: #777;
+}
+
+.mensaje-vacio p {
+  margin-bottom: 5px;
+}

@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ coleccionNombre }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-card class="ion-no-margin">
+    <ion-card-content class="ion-no-padding">
+      <ion-list lines="full">
+
+        <ion-item
+          button
+          detail="false"
+          *ngFor="let receta of recetas"
+          (click)="verDetalleReceta(receta.id)">
+
+          <ion-label>
+            <h3>{{ receta.nombre }}</h3>
+            <div class="metadatos-line">
+              <ion-icon name="time-outline"></ion-icon>
+              <ion-note>{{ receta.tiempo_preparacion }} min</ion-note>
+            </div>
+          </ion-label>
+
+          <ion-icon name="chevron-forward-outline" slot="end" color="medium"></ion-icon>
+        </ion-item>
+
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <div *ngIf="recetas.length === 0" class="mensaje-vacio ion-padding">
+    <p>Esta colección aún no tiene recetas.</p>
+  </div>
+
+</ion-content>

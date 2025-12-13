@@ -1,0 +1,168 @@
+/*==================================
+  VARIABLES Y FONDO GENERAL
+==================================*/
+ion-content {
+  --background: #f0ffef;
+}
+
+/* 1. Contenedor del Segmento (Estilo de Píldora) */
+.segment-container {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  margin-bottom: 10px;
+}
+
+ion-segment {
+  width: 90%;
+  --background: #fff;
+  border-radius: 50px;
+  padding: 5px;
+  border: 1px solid #c8e6c9;
+}
+
+ion-segment-button {
+  --background: transparent;
+  --background-checked: var(--ion-color-success);
+
+  --color: #777;
+  --color-checked: #fff;
+
+  --indicator-height: 0;
+
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  border-radius: 50px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* 2. Tarjeta de Listado General */
+.listado-card {
+  --background: #ffffff;
+  margin: 16px 10px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.listado-card ion-card-title {
+  color: #0f5132;
+  font-weight: 700;
+  padding: 16px 16px 0;
+  font-size: 1.25rem;
+}
+
+.listado-card ion-list {
+  background: transparent;
+  padding-bottom: 0;
+}
+
+
+/*==================================
+  3. ESTILOS DE ÍTEMS (GENERAL)
+==================================*/
+
+.listado-card ion-item {
+  --background: transparent;
+  --min-height: 70px;
+  padding-right: 16px;
+  --border-color: #e0fddc;
+  padding-left: 0;
+  transition: background-color 0.2s;
+}
+
+.listado-card ion-item:last-child {
+  border-bottom: none;
+}
+
+.listado-card ion-item h3 {
+  color: #2a2a2a;
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+
+.listado-card ion-item p {
+  color: #555;
+  font-size: 0.9rem;
+}
+
+/*==================================
+  4. ESTILOS PARA FAVORITOS
+==================================*/
+
+.favoritos-list ion-item {
+  --border-color: #f0f0f0;
+
+  .start-icon-wrapper {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #ffe0e0;
+    margin-right: 12px;
+    margin-left: 16px;
+  }
+
+  ion-icon[name="heart"] {
+    font-size: 1.2rem;
+  }
+}
+
+.metadatos-line {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  color: #777;
+  margin-top: 4px;
+}
+
+.metadatos-line ion-icon {
+  font-size: 1rem;
+  margin-right: 4px;
+  color: #0f5132;
+}
+
+.fecha-guardado {
+  margin-left: 10px;
+  padding-left: 10px;
+  border-left: 1px solid #ddd;
+  color: #999;
+}
+
+
+/*==================================
+  5. ESTILOS PARA COLECCIONES
+==================================*/
+.colecciones-list ion-item ion-icon[slot="start"] {
+  font-size: 1.5rem;
+  margin-right: 8px;
+  margin-left: 16px;
+}
+
+.cantidad-recetas {
+  color: #0f5132;
+  font-weight: bold;
+  font-size: 1rem;
+  margin-right: 10px;
+}
+
+.listado-card ion-icon[name="chevron-forward-outline"] {
+  color: #999;
+}
+
+
+/* 6. Mensaje vacío y FAB */
+.mensaje-vacio {
+  text-align: center;
+  padding: 30px 20px;
+  color: #777;
+}
+
+ion-fab-button {
+  --box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}

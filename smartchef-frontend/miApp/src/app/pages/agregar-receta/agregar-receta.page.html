@@ -1,0 +1,156 @@
+<ion-content [fullscreen]="true" class="agregar-contenido">
+
+  <ion-segment [(ngModel)]="segmentoSeleccionado" name="segmentos" mode="md">
+    <ion-segment-button value="basica">
+      <ion-label>BÁSICA</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="ingredientes">
+      <ion-label>INGREDIENTES</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="detalles">
+      <ion-label>DETALLES</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <form #f="ngForm" (ngSubmit)="guardarReceta()">
+
+    <div [hidden]="segmentoSeleccionado !== 'basica'">
+      <ion-card class="agregar-receta-card">
+        <ion-card-content>
+
+          <ion-item>
+            <ion-label position="stacked">Nombre de la Receta</ion-label>
+            <ion-input type="text" [(ngModel)]="formularioReceta.nombre" name="nombre" required></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Descripción</ion-label>
+            <ion-textarea [(ngModel)]="formularioReceta.descripcion" name="descripcion" rows="3" autoGrow="true" placeholder="Una descripción corta y atractiva." required></ion-textarea>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-label class="ion-text-wrap ion-text-start">Sube o enlaza la imagen de tu plato.</ion-label>
+          </ion-item>
+
+          <div class="photo-upload-area" (click)="abrirInputFoto()">
+            <div *ngIf="!formularioReceta.foto" class="photo-placeholder ion-text-center">
+              <ion-icon name="image-outline" size="large" color="medium"></ion-icon>
+              <p>Añadir foto principal</p>
+            </div>
+            <div *ngIf="formularioReceta.foto" class="photo-preview-container">
+              <img [src]="formularioReceta.foto" class="recipe-image-preview" alt="Vista previa de la receta">
+              <ion-button fill="clear" color="danger" (click)="$event.stopPropagation(); eliminarFoto()" class="delete-button">
+                <ion-icon name="remove-circle-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+
+    <div [hidden]="segmentoSeleccionado !== 'ingredientes'">
+
+      <ion-card class="agregar-receta-card">
+        <ion-card-header>
+          <ion-card-title>Ingredientes</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="ion-padding-top" *ngIf="formularioReceta.nombresIngredientes.length > 0">
+            <ion-chip *ngFor="let nombre of formularioReceta.nombresIngredientes; let i = index" color="primary" mode="ios">
+              {{ nombre }}
+              <ion-icon name="close-circle-outline" (click)="eliminarIngrediente(i)"></ion-icon>
+            </ion-chip>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="agregar-receta-card">
+        <ion-card-header>
+          <ion-card-title>Instrucciones Paso a Paso</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div *ngFor="let paso of formularioReceta.instrucciones; let i = index">
+            <ion-item class="ion-margin-bottom">
+              <ion-label position="stacked">Paso {{ i + 1 }}</ion-label>
+              <ion-textarea
+                [(ngModel)]="formularioReceta.instrucciones[i]"
+                name="instruccion-{{i}}"
+                rows="2"
+                autoGrow="true"
+                required>
+              </ion-textarea>
+              <ion-button slot="end" fill="clear" color="danger" (click)="eliminarInstruccion(i)" [disabled]="formularioReceta.instrucciones.length === 1">
+                <ion-icon name="remove-circle-outline"></ion-icon>
+              </ion-button>
+            </ion-item>
+          </div>
+
+          <ion-button expand="block" fill="outline" (click)="agregarInstruccion()">
+            <ion-icon name="add-outline" slot="start"></ion-icon>
+            Añadir Nuevo Paso
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+
+    </div>
+
+    <div [hidden]="segmentoSeleccionado !== 'detalles'">
+      <ion-card class="agregar-receta-card">
+        <ion-card-header>
+          <ion-card-title>Detalles y Tiempos</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+
+          <ion-item>
+            <ion-label position="stacked">Tiempo Preparación (min)</ion-label>
+            <div class="counter-input">
+              <ion-button fill="clear" (click)="ajustarValorNumerico('tiempo_preparacion', 1)">+</ion-button>
+              <ion-input type="number" [(ngModel)]="formularioReceta.tiempo_preparacion" name="tiempo_preparacion" min="1" required></ion-input>
+              <ion-button fill="clear" (click)="ajustarValorNumerico('tiempo_preparacion', -1)"
+                          [disabled]="!puedeDecrementar('tiempo_preparacion')">-</ion-button> </div>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Porciones / Raciones</ion-label>
+            <div class="counter-input">
+              <ion-button fill="clear" (click)="ajustarValorNumerico('porciones', 1)">+</ion-button>
+              <ion-input type="number" [(ngModel)]="formularioReceta.porciones" name="porciones" min="1" required></ion-input>
+              <ion-button fill="clear" (click)="ajustarValorNumerico('porciones', -1)"
+                          [disabled]="!puedeDecrementar('porciones')">-</ion-button>
+            </div>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Dificultad</ion-label>
+            <ion-select [(ngModel)]="formularioReceta.dificultad" name="dificultad" interface="action-sheet" placeholder="Selecciona la dificultad" required>
+              <ion-select-option value="BAJA">
+                <ion-icon name="radio-button-on-outline" color="success" slot="start"></ion-icon>
+                BAJA
+              </ion-select-option>
+              <ion-select-option value="MEDIA">
+                <ion-icon name="radio-button-on-outline" color="warning" slot="start"></ion-icon>
+                MEDIA
+              </ion-select-option>
+              <ion-select-option value="ALTA">
+                <ion-icon name="radio-button-on-outline" color="danger" slot="start"></ion-icon>
+                ALTA
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+  </form>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar color="clear">
+    <ion-button expand="block" color="success" size="large" (click)="guardarReceta()" [disabled]="f.invalid">
+      GUARDAR RECETA
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,39 @@
+<ion-content [fullscreen]="true">
+
+  <ion-card class="calendario-card ion-padding">
+    <ion-card-title class="ion-text-center">Calendario de Cocina</ion-card-title>
+    <div class="calendar-placeholder ion-text-center ion-margin-top">
+      <p>Visualización del calendario con los días marcados (Implementación futura del componente)</p>
+      <ion-icon name="calendar-outline" size="large" color="medium"></ion-icon>
+    </div>
+  </ion-card>
+
+  <ion-card class="historial-list-card">
+    <ion-card-header>
+      <ion-card-title>Últimas Recetas Realizadas</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+
+      <ion-list lines="full">
+        <ion-item *ngFor="let registro of historialRecetas">
+          <ion-label>
+            <h3>{{ registro.nombreReceta }}</h3>
+            <p>
+              Fecha: {{ registro.fecha_realizacion | date: 'mediumDate' }}
+              <span *ngIf="registro.estado === 'completada'">| Duración: {{ registro.duracion }} min</span>
+            </p>
+          </ion-label>
+          <ion-chip slot="end" [color]="registro.estado === 'completada' ? 'success' : 'warning'">
+            {{ registro.estado | replace: '_':' ' | uppercase }}
+          </ion-chip>
+        </ion-item>
+      </ion-list>
+
+      <div *ngIf="historialRecetas.length === 0" class="mensaje-vacio">
+        <p>¡Es hora de cocinar! Tu historial está vacío.</p>
+      </div>
+
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

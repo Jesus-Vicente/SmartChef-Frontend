@@ -1,0 +1,61 @@
+/* Estilos base: Fondo de página claro */
+ion-content {
+  --background: #f0ffef;
+}
+
+/* 1. Estilos del área de Avatar */
+.avatar-area {
+  padding-top: 30px !important;
+  padding-bottom: 20px !important;
+}
+
+.avatar-area ion-icon {
+  font-size: 7rem; /* Icono grande para el perfil */
+}
+
+.avatar-area h2 {
+  color: #2a4f2e; /* Verde oscuro para el saludo */
+  margin-top: 5px;
+  font-weight: 700;
+}
+
+/* 2. Estilos de la tarjeta de datos (Similar a agregar-receta) */
+.datos-card {
+  --background: #e0fddc; /* Fondo de tarjeta claro */
+  margin: 16px 0;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.datos-card ion-card-title {
+  color: #2a4f2e; /* Verde oscuro para el título */
+  font-weight: bold;
+}
+
+/* 3. Estilos de los ítems de datos */
+.datos-card ion-item {
+  --background: transparent;
+  --min-height: 45px;
+  --padding-start: 0;
+  /* Eliminamos el borde inferior del último ítem */
+  border-bottom: 1px solid #c8e6c9;
+}
+
+/* Estilo para el valor del dato (el contenido) */
+.datos-card ion-item .dato-valor {
+  color: #2a2a2a; /* Texto oscuro para el valor */
+  font-size: 1.05rem;
+  padding-top: 5px;
+}
+
+/* Estilo para la etiqueta (Nombre, Email) */
+.datos-card ion-item ion-label[position="stacked"] {
+  color: #0f5132; /* Verde más oscuro para la etiqueta */
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* Quitamos el borde del último item dentro de la tarjeta */
+.datos-card ion-card-content ion-item:last-child {
+  border-bottom: none;
+}
