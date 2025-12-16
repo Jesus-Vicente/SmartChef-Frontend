@@ -17,15 +17,18 @@ import {
   IonSelect,
   IonSelectOption,
   IonTextarea,
-  IonToolbar
+  IonToolbar,
+  AlertController
 } from '@ionic/angular/standalone';
 import {addIcons} from "ionicons";
-import {addOutline, closeCircleOutline, imageOutline, nuclear, radioOutline, removeCircleOutline} from "ionicons/icons";
+import {addOutline, closeCircleOutline, imageOutline, radioOutline, removeCircleOutline} from "ionicons/icons";
 import {RecetaService} from "../../services/receta.service";
 import {Receta} from "../../models/Receta.model";
 import {RecetaCrear} from "../../models/RecetaCrear.model";
 import {Router} from "@angular/router";
-import {AlertController} from "@ionic/angular";
+import {IngredienteReceta} from "../../models/IngredienteReceta.model";
+import {PreferenciaService} from "../../services/preferencia.service";
+import {Preferencia} from "../../models/Preferencia.model";
 
 @Component({
   selector: 'app-agregar-receta',
@@ -44,31 +47,78 @@ export class AgregarRecetaPage implements OnInit {
   private router = inject(Router);
   private alertController = inject(AlertController);
 
+  private preferenciaService = inject(PreferenciaService);
+  // --- CORRECCIÓN DE TIPO: Usar el modelo Preferencia[] ---
+  protected preferenciasDisponibles: Preferencia[] = [];
+
   segmentoSeleccionado: 'basica' | 'ingredientes' | 'detalles' = 'basica';
+
+  constructor() {
+    addIcons({closeCircleOutline, radioOutline, removeCircleOutline, addOutline, imageOutline})
+  }
+
+  ngOnInit() {
+    this.cargarPreferenciasDisponibles();
+  }
+
+  cargarPreferenciasDisponibles() {
+    this.preferenciaService.obtenerPreferencia().subscribe({
+      next: (data) => {
+        this.preferenciasDisponibles = data;
+        console.log('Preferencias cargadas (IDs):', data.map(p => ({ id: p.id, nombre: p.nombrePreferencia })));
+      },
+      error: (error) => console.error('Error al cargar preferencias:', error)
+    });
+  }
+
+  togglePreferencia(preferenciaId: number) {
+    if (!this.formularioReceta.idPreferencias) {
+      this.formularioReceta.idPreferencias = [];
+    }
+
+    const index = this.formularioReceta.idPreferencias.indexOf(preferenciaId);
+
+    if (index > -1) {
+      this.formularioReceta.idPreferencias.splice(index, 1);
+    } else {
+      this.formularioReceta.idPreferencias.push(preferenciaId);
+    }
+    console.log(`Toggle ID ${preferenciaId}. IDs activos:`, this.formularioReceta.idPreferencias);
+  }
+
+  esPreferenciaActiva(preferenciaId: number): boolean {
+    if (!this.formularioReceta.idPreferencias) {
+      return false;
+    }
+    return this.formularioReceta.idPreferencias.includes(preferenciaId);
+  }
+
 
   protected formularioReceta: RecetaCrear = {
     nombre: '',
     descripcion: '',
-    instrucciones: [],
+    instrucciones: [''],
     tiempo_preparacion: 1,
     dificultad: 'BAJA',
     porciones: 1,
-    nombresIngredientes: [],
     costo_estimado: 0,
-    foto: '',
-    id_foto: null
+    url_foto: '',
+    id_foto: null,
+    idUsuarioCreador: 1,
+    ingredientesConDetalle: [],
+    idPreferencias: []
   };
 
   async abrirInputFoto() {
-    const alert = await this.alertController.create({ // Ya no dará error
-      header: 'Enlazar Foto (DEMO)',
+    const alert = await this.alertController.create({
+      header: 'Enlazar Foto',
       subHeader: 'Ingresa la URL de la imagen',
       inputs: [
         {
           name: 'url',
           type: 'url',
           placeholder: 'URL de la foto',
-          value: this.formularioReceta.foto || ''
+          value: this.formularioReceta.url_foto || ''
         },
       ],
       buttons: [
@@ -76,7 +126,7 @@ export class AgregarRecetaPage implements OnInit {
         {
           text: 'Aplicar',
           handler: (data: { url: string; }) => {
-            this.formularioReceta.foto = data.url.trim() || '';
+            this.formularioReceta.url_foto = data.url.trim() || '';
             console.log("SIMULACIÓN: URL de foto guardada.");
           },
         },
@@ -86,47 +136,36 @@ export class AgregarRecetaPage implements OnInit {
   }
 
   eliminarFoto() {
-    this.formularioReceta.foto = '';
+    this.formularioReceta.url_foto = '';
     console.log("SIMULACIÓN: Foto eliminada.");
   }
 
-  constructor() {
-    addIcons({closeCircleOutline, radioOutline, removeCircleOutline, addOutline, imageOutline})
-  }
-
-  ngOnInit() {
-    this.cargarRecetas();
-  }
-
-  cargarRecetas(): void {
-
-  }
-
-
   ingredienteBuscado: string = '';
-
-
-
-
-
-
 
   agregarIngrediente(nombre: string) {
     if (!nombre || nombre.trim() === '') return;
 
     const nombreLimpio = nombre.trim();
 
-    const existe = this.formularioReceta.nombresIngredientes.some(n => n.toLowerCase() === nombreLimpio.toLowerCase());
+    const existe = this.formularioReceta.ingredientesConDetalle.some(
+      i => i.nombre.toLowerCase() === nombreLimpio.toLowerCase()
+    );
 
     if (!existe) {
-      this.formularioReceta.nombresIngredientes.push(nombreLimpio);
+      const nuevoIngrediente: IngredienteReceta = {
+        nombre: nombreLimpio,
+        cantidad: 1,
+        unidad: 'unidad'
+      }
+
+      this.formularioReceta.ingredientesConDetalle.push(nuevoIngrediente);
     }
 
-    this.ingredienteBuscado = ''; // limpiar búsqueda después de añadir
+    this.ingredienteBuscado = '';
   }
 
   eliminarIngrediente(index: number) {
-    this.formularioReceta.nombresIngredientes.splice(index, 1);
+    this.formularioReceta.ingredientesConDetalle.splice(index, 1);
   }
 
   agregarInstruccion() {
@@ -139,13 +178,17 @@ export class AgregarRecetaPage implements OnInit {
     }
   }
 
+  trackByIndex(index: number, item: any): number {
+    return index;
+  }
+
   ajustarValorNumerico(controlName: 'tiempo_preparacion' | 'porciones' | 'costo_estimado', delta: number) {
     let currentValue = this.formularioReceta[controlName] === null ? 0 : Number(this.formularioReceta[controlName]);
     let newValue = currentValue + delta;
 
     if (newValue < 0 && controlName === 'costo_estimado') {
       newValue = 0;
-    } else if (newValue < 1) { // Para tiempo y porciones
+    } else if (newValue < 1) {
       newValue = 1;
     }
 
@@ -157,17 +200,49 @@ export class AgregarRecetaPage implements OnInit {
   }
 
   guardarReceta(){
-    // La validación f.invalid en el HTML maneja esto, pero mantenemos el console.log
-    if (!this.formularioReceta.nombre || !this.formularioReceta.descripcion ||
-      this.formularioReceta.tiempo_preparacion <= 0 || !this.formularioReceta.dificultad) {
-      console.log("DEMO: Formulario incompleto. Rellena todos los campos obligatorios.");
-      // No devolvemos 'return' si queremos forzar la navegación para probar la ruta
-      // Si el botón está [disabled]="f.invalid", esta línea solo se ejecuta si f.invalid es falso
+
+    if (!this.formularioReceta.nombre || this.formularioReceta.tiempo_preparacion <= 0) {
+      this.alertController.create({
+        header: 'Campos requeridos',
+        message: 'Debes completar el Nombre de la Receta y el Tiempo de Preparación.',
+        buttons: ['OK']
+      }).then(alert => alert.present());
+      return;
     }
 
-    // Esta línea se ejecuta al hacer click, lo que cumple el requisito de navegación.
-    console.log("Receta lista para enviar", this.formularioReceta);
-    this.router.navigate(['/main']);
-  }
+    const instruccionesString = this.formularioReceta.instrucciones.filter(i => i.trim() !== '').join('\n');
 
+    const dtoParaEnvio: any = {
+      nombre: this.formularioReceta.nombre,
+      descripcion: this.formularioReceta.descripcion || null,
+      instrucciones: instruccionesString || null,
+      dificultad: this.formularioReceta.dificultad,
+      tiempo_preparacion: this.formularioReceta.tiempo_preparacion,
+      costo_estimado: this.formularioReceta.costo_estimado || 0.0,
+      porciones: this.formularioReceta.porciones || 1,
+      idUsuarioCreador: this.formularioReceta.idUsuarioCreador || 1,
+      id_foto: this.formularioReceta.id_foto || null,
+      url_foto: this.formularioReceta.url_foto || null,
+      ingredientesConDetalle: this.formularioReceta.ingredientesConDetalle || [],
+      idPreferencias: this.formularioReceta.idPreferencias || []
+    };
+
+
+    console.log("Enviando DTO completo y correcto:", dtoParaEnvio);
+
+    this.recetaService.crearReceta(dtoParaEnvio).subscribe({
+      next: () => {
+        console.log("✅ Receta guardada con éxito.");
+        this.router.navigate(['/main']);
+      },
+      error: (error) => {
+        console.error("❌ Error al guardar la receta:", error);
+        this.alertController.create({
+          header: 'Error al Guardar',
+          message: 'No se pudo guardar la receta. Revisa la consola y asegúrate que el backend está corriendo y sin fallos de compilación. (Código de error 500)',
+          buttons: ['OK']
+        }).then(alert => alert.present());
+      }
+    });
+  }
 }

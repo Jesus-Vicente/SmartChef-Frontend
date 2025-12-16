@@ -1,0 +1,113 @@
+// Definiciones de variables custom
+:root {
+  // Sombra principal para las tarjetas (más sutil en modo claro, más visible en modo oscuro)
+  --app-card-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+:host {
+  // 1. Fondo del Contenido: Usamos un paso de color para que sea ligeramente diferente del color de fondo predeterminado
+  // En Dark Mode, esto hará que el fondo del ion-content sea un gris MUY oscuro.
+  --ion-background-color: var(--ion-color-step-50, #f8f8f8);
+}
+
+app-editar-receta {
+
+  // 2. Contenedores Principales (ion-card)
+  .data-card {
+    border-radius: 12px;
+    box-shadow: var(--app-card-shadow);
+    margin: 0 0 20px 0;
+
+    // Forzamos un color más claro que el fondo, que será el fondo BLANCO en modo claro,
+    // y un GRIS CLARO en modo oscuro, asegurando contraste.
+    background: var(--ion-color-step-100, #ffffff);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+
+  // Transición sutil al pasar el ratón (desktop/web)
+  @media (hover: hover) {
+    .data-card:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  ion-card-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--ion-color-dark);
+
+    ion-icon {
+      margin-right: 8px;
+      font-size: 1.6rem;
+      color: var(--ion-color-primary);
+    }
+  }
+
+  // 3. Estilos de los Items (Inputs, Selects, Textareas)
+  ion-item {
+    --border-radius: 8px;
+    --border-color: var(--ion-color-medium-shade);
+    --highlight-color-focused: var(--ion-color-primary);
+    --padding-start: 14px; // Padding interno un poco más grande
+    --inner-padding-end: 14px;
+
+    // El fondo del input debe ser aún más claro que el fondo de la card para distinguirse
+    --background: var(--ion-color-step-200, #f2f2f2);
+
+    margin-bottom: 15px;
+    transition: box-shadow 0.2s ease-in-out;
+
+    // Sombra al enfocar
+    &:focus-within {
+      box-shadow: 0 0 0 2px var(--ion-color-primary-tint, #a9c6f5);
+    }
+  }
+
+  // Lista de Ingredientes
+  .ingredientes-list {
+    ion-item {
+      --background: transparent; // Transparente para usar el fondo de la tarjeta
+
+      ion-label {
+        padding: 10px 0;
+      }
+
+      ion-label p {
+        color: var(--ion-color-medium);
+      }
+    }
+  }
+
+  // 4. Chips de Preferencias
+  ion-chip {
+    margin: 6px 4px 6px 0;
+    padding: 8px 14px;
+
+    &[color="success"] {
+      font-weight: 600;
+      // Sombra proyectada del color Success
+      box-shadow: 0 2px 5px var(--ion-color-success-shade, rgba(45, 211, 111, 0.5));
+    }
+  }
+
+  // 5. Botones
+  .add-button, .save-button {
+    --border-radius: 10px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    height: 50px;
+  }
+
+  .save-button {
+    --border-radius: 12px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    // Sombra fuerte para el botón principal
+    box-shadow: 0 5px 12px var(--ion-color-success-shade, rgba(45, 211, 111, 0.6));
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+}

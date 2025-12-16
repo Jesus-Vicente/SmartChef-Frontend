@@ -1,19 +1,23 @@
-import {Ingrediente} from "./Ingrediente.model";
-import {Foto} from "./Foto.model";
+export type DificultadType = 'Alta' | 'Media' | 'Baja';
 
 export interface RecetaDetalles {
-  id: number;
+  id?: number;
+
+  usuario_creador_id: number | null;
+  id_foto: number | null;
+
   nombre: string;
   descripcion: string;
   instrucciones: string;
-  dificultad: string;
+  dificultad: DificultadType;
+
   tiempo_preparacion: number;
-  costo_estimado: number;
   porciones: number;
-  valoracion_promedio: number;
+  costo_estimado: number;
+  valoracion_promedio: number | null;
+  fecha_creacion: string;
+  activa: boolean;
 
-  ingredientes: Ingrediente[];
-
-  foto: string;
-
+  nombresIngredientes: string[];
+  idPreferencias: number[] | null;
 }

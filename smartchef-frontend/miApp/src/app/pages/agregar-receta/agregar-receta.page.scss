@@ -119,6 +119,8 @@ ion-button[expand="block"] {
 }
 
 /* 8. Estilos para Chips/Botones de acción (Ingredientes/Pasos) */
+
+/* Estilo general para todos los chips (como los de ingredientes) */
 ion-chip {
   background-color: #d1e7dd;
   color: #0f5132; /* OSCURO: Texto del chip verde oscuro */
@@ -131,6 +133,44 @@ ion-chip {
 ion-chip ion-icon {
   color: #0f5132; /* OSCURO: Icono del chip verde oscuro */
 }
+
+/* ESTILOS ESPECÍFICOS PARA LOS CHIPS DE PREFERENCIAS (Toggle) */
+.preferencias-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px; /* Espacio entre los chips */
+  padding-bottom: 16px; /* Espacio al final de la tarjeta */
+  pointer-events: auto;
+}
+
+.preferencias-chips ion-chip {
+  cursor: pointer;
+  padding: 8px 12px;
+  transition: all 0.2s ease;
+
+  /* --- REGLAS CLAVE PARA FORZAR EL CLIC --- */
+  position: relative;
+  z-index: 10;
+  pointer-events: all;
+  /* ------------------------------------------- */
+}
+
+/* Chip de preferencia ACTIVO (color="success") */
+.preferencias-chips ion-chip[color="success"] {
+  --background: var(--ion-color-success);
+  --color: white; /* Texto blanco para contraste */
+  font-weight: 700;
+}
+
+/* Chip de preferencia INACTIVO (color="medium") */
+.preferencias-chips ion-chip[color="medium"] {
+  --background: #d1e7dd; /* Un color claro/lima para inactivo */
+  --color: #0f5132; /* Texto en verde oscuro para contraste */
+  border: 1px solid #c2e9b8; /* Borde suave para definir */
+  font-weight: 500;
+}
+/* FIN ESTILOS ESPECÍFICOS PREFERENCIAS */
+
 
 /* 9. Estilo para el botón Añadir Nuevo Paso (fill="outline") - CORREGIDO */
 .agregar-contenido ion-button[fill="outline"] {

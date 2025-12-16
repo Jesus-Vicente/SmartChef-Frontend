@@ -1,0 +1,225 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/main" aria-label="Volver a la página principal"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-icon name="create-outline" aria-hidden="true"></ion-icon> Editar Receta
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="guardarReceta()" aria-label="Guardar Receta">
+        <ion-icon name="save-outline" aria-hidden="true"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="light" class="ion-padding">
+
+  <div *ngIf="isLoading" class="ion-text-center ion-padding" role="status">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando datos de la receta...</p>
+  </div>
+
+  <div *ngIf="!isLoading">
+
+    <ion-card class="data-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="restaurant-outline" color="primary" aria-hidden="true"></ion-icon> Información Básica
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+
+        <ion-item lines="full" fill="outline">
+          <ion-label position="stacked">Nombre</ion-label>
+          <ion-input [(ngModel)]="recetaForm.nombre" placeholder="Ej: Pastel de Chocolate" aria-label="Nombre de la receta"></ion-input>
+        </ion-item>
+
+        <ion-item lines="full" fill="outline" class="ion-margin-top">
+          <ion-label position="stacked">Descripción</ion-label>
+          <ion-textarea rows="3" [(ngModel)]="recetaForm.descripcion" placeholder="Una descripción corta y atractiva" aria-label="Descripción de la receta"></ion-textarea>
+        </ion-item>
+
+        <ion-item lines="full" fill="outline" class="ion-margin-top">
+          <ion-label position="stacked">URL de la Foto</ion-label>
+          <ion-input [(ngModel)]="recetaForm.url_foto" placeholder="http://enlace.a.tu.imagen" type="url" aria-label="URL de la Foto"></ion-input>
+        </ion-item>
+
+        <div *ngIf="recetaForm.url_foto" class="ion-padding-vertical ion-text-center">
+          <img
+            [src]="recetaForm.url_foto"
+            alt="Vista previa de la receta"
+            class="preview-image"
+          >
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="data-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="leaf-outline" color="primary" aria-hidden="true"></ion-icon> Ingredientes
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+
+        <ion-list lines="inset" class="ingredientes-list">
+          <ion-item *ngFor="let ingrediente of recetaForm.ingredientesConDetalle; let i = index">
+            <ion-label class="ion-text-wrap">
+              <span class="ion-text-uppercase ion-text-bold">{{ ingrediente.nombre }}</span>
+              <p>{{ ingrediente.cantidad }} {{ ingrediente.unidad }}</p>
+            </ion-label>
+            <ion-button
+              slot="end"
+              color="danger"
+              fill="clear"
+              (click)="eliminarIngrediente(i)"
+              aria-label="Eliminar {{ ingrediente.nombre }}"
+            >
+              <ion-icon name="close-circle-outline" aria-hidden="true"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </ion-list>
+
+        <p *ngIf="!recetaForm.ingredientesConDetalle || recetaForm.ingredientesConDetalle.length === 0" class="ion-text-center ion-padding-top ion-text-note">
+          No hay ingredientes. ¡Añade uno abajo!
+        </p>
+
+        <ion-label color="medium" class="ion-padding-top ion-padding-bottom ion-text-bold new-item-label">Añadir Nuevo Ingrediente</ion-label>
+
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12">
+              <ion-item fill="outline">
+                <ion-label position="floating">Ingrediente</ion-label>
+                <ion-select [(ngModel)]="nuevoIngredienteId" interface="popover" placeholder="Seleccionar ingrediente" aria-label="Seleccionar ingrediente">
+                  <ion-select-option *ngFor="let ing of ingredientesDisponibles" [value]="ing.id">
+                    {{ ing.nombre }}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-col>
+            <ion-col size="6">
+              <ion-item fill="outline" class="ion-margin-top">
+                <ion-label position="floating">Cantidad</ion-label>
+                <ion-input type="number" [(ngModel)]="nuevoCantidadIngrediente" inputmode="numeric" aria-label="Cantidad del ingrediente"></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col size="6">
+              <ion-item fill="outline" class="ion-margin-top">
+                <ion-label position="floating">Unidad</ion-label>
+                <ion-input [(ngModel)]="nuevoUnidadIngrediente" placeholder="Ej: gr, ml, unidad" aria-label="Unidad de medida del ingrediente"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <ion-button expand="block" color="secondary" (click)="agregarIngrediente()" class="ion-margin-top add-button">
+          <ion-icon name="add-circle-outline" slot="start" aria-hidden="true"></ion-icon> Añadir Ingrediente
+        </ion-button>
+
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="data-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="document-text-outline" color="primary" aria-hidden="true"></ion-icon> Instrucciones
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item lines="none" fill="outline">
+          <ion-textarea
+            rows="6"
+            [(ngModel)]="recetaForm.instrucciones"
+            placeholder="Escribe paso a paso cómo preparar esta deliciosa receta..."
+            aria-label="Instrucciones de la receta"
+          ></ion-textarea>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="data-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="timer-outline" color="primary" aria-hidden="true"></ion-icon> Detalles y Tiempos
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6">
+              <ion-item lines="none" fill="outline">
+                <ion-label position="stacked">Tiempo (min)</ion-label>
+                <ion-input type="number" [(ngModel)]="recetaForm.tiempo_preparacion" inputmode="numeric" aria-label="Tiempo de preparación en minutos"></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col size="6">
+              <ion-item lines="none" fill="outline">
+                <ion-label position="stacked">Porciones</ion-label>
+                <ion-input type="number" [(ngModel)]="recetaForm.porciones" inputmode="numeric" aria-label="Número de porciones"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <ion-item lines="full" fill="outline" class="ion-margin-top">
+          <ion-icon name="cash-outline" slot="start" aria-hidden="true"></ion-icon>
+          <ion-label position="stacked">Costo Estimado (EUR)</ion-label>
+          <ion-input type="number" [(ngModel)]="recetaForm.costo_estimado" placeholder="0.00" inputmode="decimal" aria-label="Costo estimado en euros"></ion-input>
+        </ion-item>
+
+        <ion-item lines="full" fill="outline" class="ion-margin-top">
+          <ion-icon name="flag-outline" slot="start" aria-hidden="true"></ion-icon>
+          <ion-label>Dificultad</ion-label>
+          <ion-select [(ngModel)]="recetaForm.dificultad" interface="popover" placeholder="Seleccionar Dificultad" aria-label="Seleccionar dificultad de la receta">
+            <ion-select-option value="BAJA">Baja</ion-select-option>
+            <ion-select-option value="MEDIA">Media</ion-select-option>
+            <ion-select-option value="ALTA">Alta</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="data-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="heart-outline" color="primary" aria-hidden="true"></ion-icon> Preferencias (Etiquetas)
+        </ion-card-title>
+        <ion-card-subtitle>Selecciona las etiquetas que aplican a esta receta.</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="ion-margin-vertical">
+          <ion-chip
+            *ngFor="let pref of preferenciasDisponibles"
+            [color]="isPreferenciaActiva(pref.id) ? 'success' : 'medium'"
+            (click)="togglePreferencia(pref.id)"
+            role="button"
+            [attr.aria-pressed]="isPreferenciaActiva(pref.id)"
+            aria-label="Alternar preferencia: {{ pref.nombrePreferencia }}"
+          >
+            <ion-label>{{ pref.nombrePreferencia }}</ion-label>
+          </ion-chip>
+          <p *ngIf="preferenciasDisponibles.length === 0" class="ion-text-note">No hay preferencias disponibles.</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="ion-padding-bottom ion-padding-top">
+      <ion-button
+        expand="full"
+        color="success"
+        (click)="guardarReceta()"
+        class="save-button"
+      >
+        <ion-icon name="save-outline" slot="start" aria-hidden="true"></ion-icon>
+        ACTUALIZAR RECETA
+      </ion-button>
+    </div>
+
+  </div>
+</ion-content>

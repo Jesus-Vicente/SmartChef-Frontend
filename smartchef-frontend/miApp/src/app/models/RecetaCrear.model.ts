@@ -1,3 +1,5 @@
+import {IngredienteReceta} from "./IngredienteReceta.model";
+
 export interface RecetaCrear {
   nombre: string;
   descripcion: string;
@@ -7,8 +9,13 @@ export interface RecetaCrear {
   costo_estimado: number;
   porciones: number;
 
+  idUsuarioCreador: number | null;
   id_foto: number | null;
-  nombresIngredientes: string[];
+  url_foto: string | null;
 
-  foto: string;
+  ingredientesConDetalle: IngredienteReceta[];
+
+  idPreferencias: number[] | null;
+
+
 }

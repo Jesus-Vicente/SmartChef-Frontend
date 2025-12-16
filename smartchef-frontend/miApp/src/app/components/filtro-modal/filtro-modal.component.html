@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cerrarModal()" color="danger">
+        CANCELAR
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>Filtros de Recetas</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="aplicarFiltros()" color="success" strong="true">
+        APLICAR
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-list lines="full">
+    <ion-list-header>
+      <ion-label color="primary">Preferencias</ion-label>
+    </ion-list-header>
+    <ion-item *ngFor="let pref of preferencias">
+      <ion-label>{{ pref.nombre }}</ion-label>
+      <ion-checkbox slot="start" [(ngModel)]="pref.seleccionada"></ion-checkbox>
+    </ion-item>
+  </ion-list>
+
+  <ion-item-divider></ion-item-divider>
+
+  <ion-list lines="none">
+    <ion-list-header>
+      <ion-label color="primary">Ingredientes</ion-label>
+      <ion-note slot="end" class="ion-text-wrap" color="medium" style="font-size: 0.8em; max-width: 50%;">
+        (La receta debe contener todos los ingredientes seleccionados)
+      </ion-note>
+    </ion-list-header>
+
+    <ion-item>
+      <ion-select label="Añadir ingrediente" placeholder="Buscar ingrediente"
+                  [(ngModel)]="ingredienteASeleccionar" interface="popover" label-placement="floating">
+        <ion-select-option *ngFor="let ing of ingredientesDisponibles" [value]="ing">
+          {{ ing }}
+        </ion-select-option>
+      </ion-select>
+
+      <ion-button slot="end" (click)="anadirIngrediente()" [disabled]="!ingredienteASeleccionar">
+        Añadir
+      </ion-button>
+    </ion-item>
+
+    <ion-list lines="full" *ngIf="ingredientesActivos.length > 0">
+      <ion-list-header>
+        <ion-label color="secondary">Ingredientes Activos (Filtro)</ion-label>
+      </ion-list-header>
+
+      <ion-item *ngFor="let activo of ingredientesActivos">
+        <ion-label>
+          {{ activo.nombre }}
+        </ion-label>
+        <ion-button slot="end" fill="clear" color="danger" (click)="eliminarIngrediente(activo.nombre)">
+          <ion-icon name="close-circle-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+
+    <ion-item lines="none" *ngIf="ingredientesActivos.length === 0">
+      <ion-label color="medium" class="ion-text-center">
+        No hay ingredientes seleccionados para filtrar.
+      </ion-label>
+    </ion-item>
+
+  </ion-list>
+
+</ion-content>

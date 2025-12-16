@@ -3,6 +3,10 @@
   <ion-header>
     <div class="searchbar-contenedor">
       <app-search-bar (searchChange)="onSearchChanged($event)"></app-search-bar>
+
+      <ion-button fill="solid" (click)="abrirFiltroModal()">
+        <ion-icon name="options-outline" slot="icon-only"></ion-icon>
+      </ion-button>
     </div>
   </ion-header>
 
@@ -11,7 +15,10 @@
     <ion-card *ngFor="let receta of recetas" (click)="irADetalleReceta(receta.id)">
 
       <div class="imagen-contenedor">
-        <ion-img src="{{receta.id_foto}}" class="imagen-receta"></ion-img>
+        <ion-img
+          [src]="receta.url_foto ? receta.url_foto : '/assets/imagenes/placeholder-receta.png'"
+          class="imagen-receta">
+        </ion-img>
 
         <ion-button
           slot="end"
@@ -47,14 +54,16 @@
           <ion-card-title>{{receta.nombre}}</ion-card-title>
         </ion-card-header>
 
+
         <ion-card-content class="ion-no-padding">
           <div class="filtros-receta">
-            <span *ngIf="receta.vegetariano" class="filtro-chip chip-vegetariano">Vegetariano</span>
-            <span *ngIf="receta.sin_gluten" class="filtro-chip chip-gluten">Sin Gluten</span>
-            <span *ngIf="receta.comida_rapida" class="filtro-chip chip-rapida">Rápida</span>
-            <span *ngIf="receta.economico" class="filtro-chip chip-economico">Económico</span>
+            <span *ngIf="verificarPreferencias(receta, 'Vegetariano')" class="filtro-chip chip-vegetariano">Vegetariano</span>
+            <span *ngIf="verificarPreferencias(receta, 'Sin Glúten')" class="filtro-chip chip-gluten">Sin Glúten</span>
+            <span *ngIf="verificarPreferencias(receta, 'Comida Rápida')" class="filtro-chip chip-rapida">Comida Rápida</span>
+            <span *ngIf="verificarPreferencias(receta, 'Económica')" class="filtro-chip chip-economico">Económica</span>
           </div>
         </ion-card-content>
+
       </div>
     </ion-card>
   </div>

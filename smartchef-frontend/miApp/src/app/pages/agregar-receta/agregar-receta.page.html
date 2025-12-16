@@ -25,7 +25,7 @@
 
           <ion-item>
             <ion-label position="stacked">Descripción</ion-label>
-            <ion-textarea [(ngModel)]="formularioReceta.descripcion" name="descripcion" rows="3" autoGrow="true" placeholder="Una descripción corta y atractiva." required></ion-textarea>
+            <ion-textarea [(ngModel)]="formularioReceta.descripcion" name="descripcion" rows="3" autoGrow="true" placeholder="Una descripción corta y atractiva."></ion-textarea>
           </ion-item>
 
           <ion-item lines="none">
@@ -33,12 +33,12 @@
           </ion-item>
 
           <div class="photo-upload-area" (click)="abrirInputFoto()">
-            <div *ngIf="!formularioReceta.foto" class="photo-placeholder ion-text-center">
+            <div *ngIf="!formularioReceta.url_foto" class="photo-placeholder ion-text-center">
               <ion-icon name="image-outline" size="large" color="medium"></ion-icon>
               <p>Añadir foto principal</p>
             </div>
-            <div *ngIf="formularioReceta.foto" class="photo-preview-container">
-              <img [src]="formularioReceta.foto" class="recipe-image-preview" alt="Vista previa de la receta">
+            <div *ngIf="formularioReceta.url_foto" class="photo-preview-container">
+              <img [src]="formularioReceta.url_foto" class="recipe-image-preview" alt="Vista previa de la receta">
               <ion-button fill="clear" color="danger" (click)="$event.stopPropagation(); eliminarFoto()" class="delete-button">
                 <ion-icon name="remove-circle-outline"></ion-icon>
               </ion-button>
@@ -56,9 +56,16 @@
           <ion-card-title>Ingredientes</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          <div class="ion-padding-top" *ngIf="formularioReceta.nombresIngredientes.length > 0">
-            <ion-chip *ngFor="let nombre of formularioReceta.nombresIngredientes; let i = index" color="primary" mode="ios">
-              {{ nombre }}
+          <ion-item>
+            <ion-input type="text" placeholder="Añadir ingrediente..." [(ngModel)]="ingredienteBuscado" name="ingredienteBuscado" (keyup.enter)="agregarIngrediente(ingredienteBuscado)"></ion-input>
+            <ion-button slot="end" (click)="agregarIngrediente(ingredienteBuscado)" [disabled]="!ingredienteBuscado">
+              <ion-icon name="add-outline"></ion-icon>
+            </ion-button>
+          </ion-item>
+
+          <div class="ion-padding-top" *ngIf="formularioReceta.ingredientesConDetalle.length > 0">
+            <ion-chip *ngFor="let detalle of formularioReceta.ingredientesConDetalle; let i = index" color="primary" mode="ios">
+              {{ detalle.nombre }}
               <ion-icon name="close-circle-outline" (click)="eliminarIngrediente(i)"></ion-icon>
             </ion-chip>
           </div>
@@ -70,19 +77,15 @@
           <ion-card-title>Instrucciones Paso a Paso</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          <div *ngFor="let paso of formularioReceta.instrucciones; let i = index">
+          <div *ngFor="let paso of formularioReceta.instrucciones; let i = index; trackBy: trackByIndex">
             <ion-item class="ion-margin-bottom">
               <ion-label position="stacked">Paso {{ i + 1 }}</ion-label>
               <ion-textarea
                 [(ngModel)]="formularioReceta.instrucciones[i]"
                 name="instruccion-{{i}}"
                 rows="2"
-                autoGrow="true"
-                required>
+                autoGrow="true">
               </ion-textarea>
-              <ion-button slot="end" fill="clear" color="danger" (click)="eliminarInstruccion(i)" [disabled]="formularioReceta.instrucciones.length === 1">
-                <ion-icon name="remove-circle-outline"></ion-icon>
-              </ion-button>
             </ion-item>
           </div>
 
@@ -116,7 +119,7 @@
             <ion-label position="stacked">Porciones / Raciones</ion-label>
             <div class="counter-input">
               <ion-button fill="clear" (click)="ajustarValorNumerico('porciones', 1)">+</ion-button>
-              <ion-input type="number" [(ngModel)]="formularioReceta.porciones" name="porciones" min="1" required></ion-input>
+              <ion-input type="number" [(ngModel)]="formularioReceta.porciones" name="porciones" min="1"></ion-input>
               <ion-button fill="clear" (click)="ajustarValorNumerico('porciones', -1)"
                           [disabled]="!puedeDecrementar('porciones')">-</ion-button>
             </div>
@@ -124,7 +127,7 @@
 
           <ion-item>
             <ion-label position="floating">Dificultad</ion-label>
-            <ion-select [(ngModel)]="formularioReceta.dificultad" name="dificultad" interface="action-sheet" placeholder="Selecciona la dificultad" required>
+            <ion-select [(ngModel)]="formularioReceta.dificultad" name="dificultad" interface="action-sheet" placeholder="Selecciona la dificultad">
               <ion-select-option value="BAJA">
                 <ion-icon name="radio-button-on-outline" color="success" slot="start"></ion-icon>
                 BAJA
@@ -140,6 +143,22 @@
             </ion-select>
           </ion-item>
 
+          <ion-item lines="none" class="ion-margin-top">
+            <ion-label>Preferencias (Opcional)</ion-label>
+          </ion-item>
+
+          <div class="preferencias-chips ion-padding-horizontal">
+            <ion-chip
+              *ngFor="let pref of preferenciasDisponibles; trackBy: trackByIndex"
+              (tap)="pref.id && togglePreferencia(pref.id)"
+              [color]="esPreferenciaActiva(pref.id) ? 'success' : 'medium'"
+              mode="ios"
+              class="preferencia-chip">
+
+              {{ pref.nombrePreferencia }}
+
+            </ion-chip>
+          </div>
         </ion-card-content>
       </ion-card>
     </div>

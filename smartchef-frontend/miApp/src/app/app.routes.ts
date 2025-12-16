@@ -81,7 +81,12 @@ export const routes: Routes = [
     data: {
       animation: 'fade'
     }
+  },
+  {
+    path: 'editar-receta/:id',
+    loadComponent: () => import('./pages/editar-receta/editar-receta.page').then( m => m.EditarRecetaPage)
   }
+
 
 
 

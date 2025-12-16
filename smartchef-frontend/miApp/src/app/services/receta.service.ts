@@ -1,10 +1,7 @@
   import {inject, Injectable} from '@angular/core';
   import { Observable } from 'rxjs';
-  import { HttpClient } from '@angular/common/http';
+  import {HttpClient, HttpParams} from '@angular/common/http';
   import { Receta } from "../models/Receta.model";
-  import { map } from 'rxjs/operators';
-  import { of } from 'rxjs';
-  import {environment} from "../../environments/environment";
   import {RecetaCrear} from "../models/RecetaCrear.model";
   import {RecetaDetalles} from "../models/RecetaDetalles.model";
   import {AsociarIngrediente} from "../models/AsociarIngrediente.model";
@@ -17,7 +14,24 @@
     private clienteHttp= inject(HttpClient);
 
     obtenerReceta():Observable<Receta[]> {
-      return this.clienteHttp.get<Receta[]>("/api/recetas/all")
+      return this.clienteHttp.get<Receta[]>("/api/receta/all")
+    }
+
+    obtenerRecetasFiltradas(
+      preferencias: string[],
+      ingredientes: string[]
+    ): Observable<Receta[]> {
+      let parametros = new HttpParams();
+
+      if (preferencias && preferencias.length > 0) {
+        parametros = parametros.set("preferencias", preferencias.join(","));
+      }
+
+      if (ingredientes && ingredientes.length > 0) {
+        parametros = parametros.set("ingredientes", ingredientes.join(","));
+      }
+
+      return this.clienteHttp.get<Receta[]>("/api/receta/filtros-combinado", {params: parametros});
     }
 
     crearReceta(receta: RecetaCrear): Observable<any> {
@@ -28,13 +42,16 @@
       return this.clienteHttp.get<RecetaDetalles>(`/api/receta/detalle/${id}`)
     }
 
-    vincularIngrediente(asociacion: AsociarIngrediente) {
-      return this.clienteHttp.put("/api/receta/ingrediente/vincular", asociacion)
+
+    obtenerRecetasConIngredientes(id:number): Observable<RecetaCrear> {
+      return this.clienteHttp.get<RecetaCrear>(`/api/receta/recetasConIngredientes/${id}`)
     }
 
-    desvincularIngrediente(asociacion: AsociarIngrediente) {
-      return this.clienteHttp.put("/api/receta/ingrediente/desvincular/", asociacion)
+    modificarReceta(id: number | null, receta: RecetaCrear): Observable<any> {
+      return this.clienteHttp.put(`/api/receta/modificar/${id}`, receta)
     }
+
+
 
     eliminarReceta(id: number): Observable<any> {
       return this.clienteHttp.delete(`/api/receta/eliminar/${id}`)

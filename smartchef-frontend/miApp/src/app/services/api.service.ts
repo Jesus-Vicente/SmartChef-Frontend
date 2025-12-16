@@ -21,7 +21,7 @@ export interface Receta {
 @Injectable({
   providedIn: 'root'
 })
-export class ApiService {º
+export class ApiService {
   private urlBackend = 'http://localhost:8080/smartchef-backend/api/'
 
   constructor(private http: HttpClient) { }

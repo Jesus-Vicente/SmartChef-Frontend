@@ -13,17 +13,27 @@
 
 <ion-content [fullscreen]="true">
 
+  <!-- Imagen de la receta (usando id_foto para construir URL o placeholder) -->
   <div class="imagen-portada-contenedor">
-    <ion-img src="{{receta.id_foto}}" class="imagen-portada"></ion-img>
+    <ion-img
+      [src]="
+        receta.id_foto
+          ? '/api/foto/' + receta.id_foto
+          : 'assets/img/placeholder.png'
+      "
+      class="imagen-portada">
+    </ion-img>
+
     <div class="titulo-overlay">
-      <h1 class="receta-title">{{receta.nombre}}</h1>
+      <h1 class="receta-title">{{ receta.nombre }}</h1>
       <div class="rating-bar">
         <ion-icon name="star"></ion-icon>
-        {{ receta.valoracion_promedio }}
+        {{ receta.valoracion_promedio !== null ? receta.valoracion_promedio : 'Sin valoración' }}
       </div>
     </div>
   </div>
 
+  <!-- Datos principales -->
   <ion-card class="metadatos-card ion-no-margin">
     <div class="metadatos-grid">
 
@@ -40,7 +50,7 @@
       </div>
 
       <div class="metadato-item">
-        <ion-icon name="difficulty-icon"></ion-icon>
+        <ion-icon name="globe-outline"></ion-icon>
         <span>{{ receta.dificultad }}</span>
         <p>Dificultad</p>
       </div>
@@ -48,56 +58,47 @@
     </div>
   </ion-card>
 
+  <!-- Descripción -->
   <ion-card class="section-card ion-no-margin">
     <ion-card-header>
-      <ion-card-title>Descripción General</ion-card-title>
+      <ion-card-title>Descripción</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <p class="descripcion-texto">{{ receta.descripcion_general }}</p>
-
-      <div class="chips-filtros-detalle">
-        <ion-chip *ngIf="receta.vegetariano" color="success">
-          <ion-icon name="leaf-outline"></ion-icon>
-          <ion-label>Vegetariano</ion-label>
-        </ion-chip>
-        <ion-chip *ngIf="receta.sin_gluten">
-          <ion-label>Sin Gluten</ion-label>
-        </ion-chip>
-      </div>
+      <p>{{ receta.descripcion }}</p>
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="section-card ion-no-margin">
+  <!-- Ingredientes
+  <ion-card *ngIf="receta.nombresIngredientes? receta.nombresIngredientes.length > 0 " class="section-card ion-no-margin">
     <ion-card-header>
       <ion-card-title>Ingredientes</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <ion-list lines="full">
-        <ion-item *ngFor="let ing of receta.ingredientes" class="ingrediente-item">
-          <ion-label>{{ ing.nombre }}</ion-label>
-          <ion-note slot="end">{{ ing.cantidad }}</ion-note>
+        <ion-item *ngFor="let ingrediente of receta.nombresIngredientes">
+          <ion-label>{{ ingrediente }}</ion-label>
         </ion-item>
       </ion-list>
     </ion-card-content>
-  </ion-card>
+  </ion-card> -->
 
+  <!-- Instrucciones -->
   <ion-card class="section-card ion-no-margin">
     <ion-card-header>
-      <ion-card-title>Preparación</ion-card-title>
+      <ion-card-title>Instrucciones</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-list lines="full">
-        <ion-item *ngFor="let paso of receta.preparacion; let i = index" class="paso-item">
-          <ion-label class="paso-label" text-wrap>
-            <p class="paso-numero">Paso {{ i + 1 }}</p>
-            <p>{{ paso }}</p>
-          </ion-label>
-        </ion-item>
-      </ion-list>
+      <p style="white-space: pre-line;">{{ receta.instrucciones }}</p>
     </ion-card-content>
   </ion-card>
 
-
-  <div class="espacio-final"></div>
+  <!-- Información adicional -->
+  <ion-card class="section-card ion-no-margin">
+    <ion-card-content>
+      <p><strong>Costo estimado:</strong> {{ receta.costo_estimado | currency:'EUR':'symbol':'1.2-2' }}</p>
+      <p><strong>Fecha de creación:</strong> {{ receta.fecha_creacion | date:'longDate' }}</p>
+      <p><strong>Estado:</strong> {{ receta.activa ? 'Activa' : 'Inactiva' }}</p>
+    </ion-card-content>
+  </ion-card>
 
 </ion-content>
