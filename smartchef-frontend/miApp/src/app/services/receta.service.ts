@@ -13,8 +13,10 @@
 
     private clienteHttp= inject(HttpClient);
 
+    private readonly URL_BASE = "https://backend-smartcheft.onrender.com/receta"
+
     obtenerReceta():Observable<Receta[]> {
-      return this.clienteHttp.get<Receta[]>("/api/receta/all")
+      return this.clienteHttp.get<Receta[]>(`${this.URL_BASE}/all`)
     }
 
     obtenerRecetasFiltradas(
@@ -31,30 +33,30 @@
         parametros = parametros.set("ingredientes", ingredientes.join(","));
       }
 
-      return this.clienteHttp.get<Receta[]>("/api/receta/filtros-combinado", {params: parametros});
+      return this.clienteHttp.get<Receta[]>("${this.URL_BASE}/filtros-combinado", {params: parametros});
     }
 
     crearReceta(receta: RecetaCrear): Observable<any> {
-      return this.clienteHttp.post("/api/receta/crear", receta)
+      return this.clienteHttp.post('${this.URL_BASE}/crear', receta)
     }
 
     detalleReceta(id: number): Observable<RecetaDetalles> {
-      return this.clienteHttp.get<RecetaDetalles>(`/api/receta/detalle/${id}`)
+      return this.clienteHttp.get<RecetaDetalles>(`${this.URL_BASE}/detalle/${id}`)
     }
 
 
     obtenerRecetasConIngredientes(id:number): Observable<RecetaCrear> {
-      return this.clienteHttp.get<RecetaCrear>(`/api/receta/recetasConIngredientes/${id}`)
+      return this.clienteHttp.get<RecetaCrear>(`${this.URL_BASE}/recetasConIngredientes/${id}`)
     }
 
     modificarReceta(id: number | null, receta: RecetaCrear): Observable<any> {
-      return this.clienteHttp.put(`/api/receta/modificar/${id}`, receta)
+      return this.clienteHttp.put(`${this.URL_BASE}/modificar/${id}`, receta)
     }
 
 
 
     eliminarReceta(id: number): Observable<any> {
-      return this.clienteHttp.delete(`/api/receta/eliminar/${id}`)
+      return this.clienteHttp.delete(`${this.URL_BASE}/eliminar/${id}`)
     }
 
 
