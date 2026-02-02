@@ -4,7 +4,7 @@
   import { Receta } from "../models/Receta.model";
   import {RecetaCrear} from "../models/RecetaCrear.model";
   import {RecetaDetalles} from "../models/RecetaDetalles.model";
-  import {AsociarIngrediente} from "../models/AsociarIngrediente.model";
+  import { environment } from '../../environments/environment';
 
   @Injectable({
     providedIn: 'root'
@@ -12,7 +12,7 @@
   export class RecetaService {
 
     private clienteHttp = inject(HttpClient);
-    private readonly URL_BASE = "https://backend-smartcheft.onrender.com/receta";
+    private readonly URL_BASE = `${environment.apiUrl}/receta`;
 
     obtenerReceta(): Observable<Receta[]> {
       return this.clienteHttp.get<Receta[]>(`${this.URL_BASE}/all`);
