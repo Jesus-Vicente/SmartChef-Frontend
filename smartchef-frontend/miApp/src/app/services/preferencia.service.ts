@@ -9,8 +9,9 @@ import {Preferencia} from "../models/Preferencia.model";
 export class PreferenciaService {
 
   private clientHttp= inject(HttpClient);
+  private readonly URL_BASE = "https://backend-smartcheft.onrender.com/preferencia";
 
   obtenerPreferencia():Observable<Preferencia[]> {
-    return this.clientHttp.get<Preferencia[]>('/api/preferencia/all');
+    return this.clientHttp.get<Preferencia[]>(`${this.URL_BASE}/all`);
   }
 }

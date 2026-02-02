@@ -1,4 +1,4 @@
-export type DificultadType = 'Alta' | 'Media' | 'Baja';
+export type DificultadType = 'ALTA' | 'MEDIA' | 'BAJA';
 
 export interface RecetaDetalles {
   id?: number;

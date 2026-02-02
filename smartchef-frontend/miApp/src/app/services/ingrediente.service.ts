@@ -9,13 +9,14 @@ import {Ingrediente} from "../models/Ingrediente.model";
 export class IngredienteService {
 
   private clientHttp = inject(HttpClient);
+  private readonly URL_BASE = "https://backend-smartcheft.onrender.com/ingrediente";
 
   obtenerIngredientes(): Observable<Ingrediente[]> {
-    return this.clientHttp.get<Ingrediente[]>('/api/ingrediente/all');
+    return this.clientHttp.get<Ingrediente[]>(`${this.URL_BASE}/all`);
   }
 
   obtenerIngredientesFiltro(): Observable<string[]> {
-    return this.clientHttp.get<string[]>('/api/ingrediente/nombresFiltro');
+    return this.clientHttp.get<string[]>(`${this.URL_BASE}/nombresFiltro`);
   }
 
 }
