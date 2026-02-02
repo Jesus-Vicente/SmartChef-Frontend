@@ -4,7 +4,6 @@
   import { Receta } from "../models/Receta.model";
   import {RecetaCrear} from "../models/RecetaCrear.model";
   import {RecetaDetalles} from "../models/RecetaDetalles.model";
-  import { environment } from '../../environments/environment';
 
   @Injectable({
     providedIn: 'root'
@@ -12,7 +11,6 @@
   export class RecetaService {
 
     private clienteHttp = inject(HttpClient);
-    private readonly URL_BASE = "https://backend-smartcheft.onrender.com/receta";
 
     obtenerReceta(): Observable<Receta[]> {
       return this.clienteHttp.get<Receta[]>(`https://backend-smartcheft.onrender.com/receta/all`);
@@ -30,11 +28,11 @@
       }
 
 
-      return this.clienteHttp.get<Receta[]>(`${this.URL_BASE}/filtros-combinado`, { params: parametros });
+      return this.clienteHttp.get<Receta[]>(`https://backend-smartcheft.onrender.com/receta/filtros-combinado`, { params: parametros });
     }
 
     crearReceta(receta: RecetaCrear): Observable<any> {
-      return this.clienteHttp.post(`${this.URL_BASE}/crear`, receta);
+      return this.clienteHttp.post(`https://backend-smartcheft.onrender.com/receta/crear`, receta);
     }
 
     detalleReceta(id: number): Observable<RecetaDetalles> {
