@@ -10,7 +10,7 @@ import {environment} from "../../environments/environment";
 export class PreferenciaService {
 
   private clientHttp= inject(HttpClient);
-  private readonly URL_BASE = `${environment.apiUrl}/preferencia`;
+  private readonly URL_BASE = `https://backend-smartcheft.onrender.com/preferencia`;
 
   obtenerPreferencia():Observable<Preferencia[]> {
     return this.clientHttp.get<Preferencia[]>(`${this.URL_BASE}/all`);
