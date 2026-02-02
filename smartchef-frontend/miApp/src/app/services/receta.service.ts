@@ -11,18 +11,14 @@
   })
   export class RecetaService {
 
-    private clienteHttp= inject(HttpClient);
+    private clienteHttp = inject(HttpClient);
+    private readonly URL_BASE = "https://backend-smartcheft.onrender.com/receta";
 
-    private readonly URL_BASE = "https://backend-smartcheft.onrender.com/receta"
-
-    obtenerReceta():Observable<Receta[]> {
-      return this.clienteHttp.get<Receta[]>(`${this.URL_BASE}/all`)
+    obtenerReceta(): Observable<Receta[]> {
+      return this.clienteHttp.get<Receta[]>(`${this.URL_BASE}/all`);
     }
 
-    obtenerRecetasFiltradas(
-      preferencias: string[],
-      ingredientes: string[]
-    ): Observable<Receta[]> {
+    obtenerRecetasFiltradas(preferencias: string[], ingredientes: string[]): Observable<Receta[]> {
       let parametros = new HttpParams();
 
       if (preferencias && preferencias.length > 0) {
@@ -33,31 +29,28 @@
         parametros = parametros.set("ingredientes", ingredientes.join(","));
       }
 
-      return this.clienteHttp.get<Receta[]>("${this.URL_BASE}/filtros-combinado", {params: parametros});
+      // CORREGIDO: Usando ` en lugar de "
+      return this.clienteHttp.get<Receta[]>(`${this.URL_BASE}/filtros-combinado`, { params: parametros });
     }
 
     crearReceta(receta: RecetaCrear): Observable<any> {
-      return this.clienteHttp.post('${this.URL_BASE}/crear', receta)
+      // CORREGIDO: Usando ` en lugar de '
+      return this.clienteHttp.post(`${this.URL_BASE}/crear`, receta);
     }
 
     detalleReceta(id: number): Observable<RecetaDetalles> {
-      return this.clienteHttp.get<RecetaDetalles>(`${this.URL_BASE}/detalle/${id}`)
+      return this.clienteHttp.get<RecetaDetalles>(`${this.URL_BASE}/detalle/${id}`);
     }
 
-
-    obtenerRecetasConIngredientes(id:number): Observable<RecetaCrear> {
-      return this.clienteHttp.get<RecetaCrear>(`${this.URL_BASE}/recetasConIngredientes/${id}`)
+    obtenerRecetasConIngredientes(id: number): Observable<RecetaCrear> {
+      return this.clienteHttp.get<RecetaCrear>(`${this.URL_BASE}/recetasConIngredientes/${id}`);
     }
 
     modificarReceta(id: number | null, receta: RecetaCrear): Observable<any> {
-      return this.clienteHttp.put(`${this.URL_BASE}/modificar/${id}`, receta)
+      return this.clienteHttp.put(`${this.URL_BASE}/modificar/${id}`, receta);
     }
-
-
 
     eliminarReceta(id: number): Observable<any> {
-      return this.clienteHttp.delete(`${this.URL_BASE}/eliminar/${id}`)
+      return this.clienteHttp.delete(`${this.URL_BASE}/eliminar/${id}`);
     }
-
-
   }
