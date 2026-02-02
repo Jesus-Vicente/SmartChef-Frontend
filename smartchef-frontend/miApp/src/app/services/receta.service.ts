@@ -29,12 +29,11 @@
         parametros = parametros.set("ingredientes", ingredientes.join(","));
       }
 
-      // CORREGIDO: Usando ` en lugar de "
+
       return this.clienteHttp.get<Receta[]>(`${this.URL_BASE}/filtros-combinado`, { params: parametros });
     }
 
     crearReceta(receta: RecetaCrear): Observable<any> {
-      // CORREGIDO: Usando ` en lugar de '
       return this.clienteHttp.post(`${this.URL_BASE}/crear`, receta);
     }
 
