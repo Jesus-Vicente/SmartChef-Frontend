@@ -79,7 +79,7 @@ export const routes: Routes = [
     path: 'detalle-receta/:id',
     loadComponent: () => import('./pages/detalle-receta/detalle-receta.page').then( m => m.DetalleRecetaPage),
     data: {
-      animation: 'fade'
+      animatcoion: 'fade'
     }
   },
   {
