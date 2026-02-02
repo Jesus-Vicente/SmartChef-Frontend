@@ -56,7 +56,7 @@ export class MainPage implements OnInit{
     this.cargarIngredientes();
   }
 
-  /* Barra busqueda */
+
   searchText: string = '';
 
 

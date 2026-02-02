@@ -22,7 +22,7 @@ export interface Receta {
   providedIn: 'root'
 })
 export class ApiService {
-  private urlBackend = 'http://localhost:8080/smartchef-backend/api/'
+  private urlBackend = 'https://backend-smartcheft.onrender.com'
 
   constructor(private http: HttpClient) { }
 
