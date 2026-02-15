@@ -21,7 +21,14 @@ import {
   AlertController
 } from '@ionic/angular/standalone';
 import {addIcons} from "ionicons";
-import {addOutline, closeCircleOutline, imageOutline, radioOutline, removeCircleOutline} from "ionicons/icons";
+import {
+  addOutline,
+  cameraOutline,
+  closeCircleOutline,
+  imageOutline,
+  radioOutline,
+  removeCircleOutline
+} from "ionicons/icons";
 import {RecetaService} from "../../services/receta.service";
 import {Receta} from "../../models/Receta.model";
 import {RecetaCrear} from "../../models/RecetaCrear.model";
@@ -58,7 +65,7 @@ export class AgregarRecetaPage implements OnInit {
   segmentoSeleccionado: 'basica' | 'ingredientes' | 'detalles' = 'basica';
 
   constructor() {
-    addIcons({closeCircleOutline, radioOutline, removeCircleOutline, addOutline, imageOutline})
+    addIcons({closeCircleOutline, radioOutline, removeCircleOutline, addOutline, imageOutline, cameraOutline, linkOutline: 'link'});
   }
 
   ngOnInit() {
@@ -130,7 +137,7 @@ export class AgregarRecetaPage implements OnInit {
           text: 'Pegar Enlace (URL)',
           icon: 'link-outline',
           handler: () => {
-            this.abrirInputFoto(); // Tu método actual que abre el alert
+            this.pedirURLImagen(); // Tu método actual que abre el alert
           }
         },
         {
@@ -148,6 +155,38 @@ export class AgregarRecetaPage implements OnInit {
       this.formularioReceta.url_foto = urlCapturada;
       console.log("Foto capturada con éxito:", urlCapturada);
     }
+  }
+
+  async pedirURLImagen() {
+    const alert = await this.alertController.create({
+      header: 'Enlazar Foto',
+      subHeader: 'Introduce la dirección de la imagen',
+      inputs: [
+        {
+          name: 'urlInput', // nombre del campo
+          type: 'url',
+          placeholder: 'https://ejemplo.com/plato.jpg',
+          value: this.formularioReceta.url_foto // por si ya había una
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Guardar',
+          handler: (data) => {
+            // Asignamos el valor del input al formulario
+            if (data.urlInput) {
+              this.formularioReceta.url_foto = data.urlInput.trim();
+              console.log("URL guardada:", this.formularioReceta.url_foto);
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   eliminarFoto() {

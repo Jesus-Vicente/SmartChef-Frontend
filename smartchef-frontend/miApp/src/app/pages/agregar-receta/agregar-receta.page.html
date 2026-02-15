@@ -32,15 +32,14 @@
             <ion-label class="ion-text-wrap ion-text-start">Añade una foto usando la cámara o un enlace de internet.</ion-label>
           </ion-item>
 
-          <div class="photo-upload-area" (click)="abrirOpcionesFoto()">
-
+          <div class="photo-upload-area" (click)="abrirInputFoto()">
             <div *ngIf="!formularioReceta.url_foto" class="photo-placeholder ion-text-center">
               <ion-icon name="camera-outline" size="large" color="medium"></ion-icon>
               <p>Tocar para añadir foto principal</p>
             </div>
 
             <div *ngIf="formularioReceta.url_foto" class="photo-preview-container">
-              <img [src]="formularioReceta.url_foto" class="recipe-image-preview" alt="Vista previa de la receta">
+              <img [src]="formularioReceta.url_foto" class="recipe-image-preview">
               <ion-button fill="clear" color="danger" (click)="$event.stopPropagation(); eliminarFoto()" class="delete-button">
                 <ion-icon name="close-circle-outline"></ion-icon>
               </ion-button>
