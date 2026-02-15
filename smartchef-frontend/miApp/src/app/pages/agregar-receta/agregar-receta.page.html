@@ -29,28 +29,29 @@
           </ion-item>
 
           <ion-item lines="none">
-            <ion-label class="ion-text-wrap ion-text-start">Sube o enlaza la imagen de tu plato.</ion-label>
+            <ion-label class="ion-text-wrap ion-text-start">Añade una foto usando la cámara o un enlace de internet.</ion-label>
           </ion-item>
 
-          <div class="photo-upload-area" (click)="abrirInputFoto()">
+          <div class="photo-upload-area" (click)="abrirOpcionesFoto()">
+
             <div *ngIf="!formularioReceta.url_foto" class="photo-placeholder ion-text-center">
-              <ion-icon name="image-outline" size="large" color="medium"></ion-icon>
-              <p>Añadir foto principal</p>
+              <ion-icon name="camera-outline" size="large" color="medium"></ion-icon>
+              <p>Tocar para añadir foto principal</p>
             </div>
+
             <div *ngIf="formularioReceta.url_foto" class="photo-preview-container">
               <img [src]="formularioReceta.url_foto" class="recipe-image-preview" alt="Vista previa de la receta">
               <ion-button fill="clear" color="danger" (click)="$event.stopPropagation(); eliminarFoto()" class="delete-button">
-                <ion-icon name="remove-circle-outline"></ion-icon>
+                <ion-icon name="close-circle-outline"></ion-icon>
               </ion-button>
             </div>
           </div>
+
         </ion-card-content>
       </ion-card>
     </div>
 
-
     <div [hidden]="segmentoSeleccionado !== 'ingredientes'">
-
       <ion-card class="agregar-receta-card">
         <ion-card-header>
           <ion-card-title>Ingredientes</ion-card-title>
@@ -95,7 +96,6 @@
           </ion-button>
         </ion-card-content>
       </ion-card>
-
     </div>
 
     <div [hidden]="segmentoSeleccionado !== 'detalles'">
@@ -105,14 +105,14 @@
         </ion-card-header>
 
         <ion-card-content>
-
           <ion-item>
             <ion-label position="stacked">Tiempo Preparación (min)</ion-label>
             <div class="counter-input">
               <ion-button fill="clear" (click)="ajustarValorNumerico('tiempo_preparacion', 1)">+</ion-button>
               <ion-input type="number" [(ngModel)]="formularioReceta.tiempo_preparacion" name="tiempo_preparacion" min="1" required></ion-input>
               <ion-button fill="clear" (click)="ajustarValorNumerico('tiempo_preparacion', -1)"
-                          [disabled]="!puedeDecrementar('tiempo_preparacion')">-</ion-button> </div>
+                          [disabled]="!puedeDecrementar('tiempo_preparacion')">-</ion-button>
+            </div>
           </ion-item>
 
           <ion-item>
@@ -128,18 +128,9 @@
           <ion-item>
             <ion-label position="floating">Dificultad</ion-label>
             <ion-select [(ngModel)]="formularioReceta.dificultad" name="dificultad" interface="action-sheet" placeholder="Selecciona la dificultad">
-              <ion-select-option value="BAJA">
-                <ion-icon name="radio-button-on-outline" color="success" slot="start"></ion-icon>
-                BAJA
-              </ion-select-option>
-              <ion-select-option value="MEDIA">
-                <ion-icon name="radio-button-on-outline" color="warning" slot="start"></ion-icon>
-                MEDIA
-              </ion-select-option>
-              <ion-select-option value="ALTA">
-                <ion-icon name="radio-button-on-outline" color="danger" slot="start"></ion-icon>
-                ALTA
-              </ion-select-option>
+              <ion-select-option value="BAJA">BAJA</ion-select-option>
+              <ion-select-option value="MEDIA">MEDIA</ion-select-option>
+              <ion-select-option value="ALTA">ALTA</ion-select-option>
             </ion-select>
           </ion-item>
 
@@ -150,13 +141,11 @@
           <div class="preferencias-chips ion-padding-horizontal">
             <ion-chip
               *ngFor="let pref of preferenciasDisponibles; trackBy: trackByIndex"
-              (tap)="pref.id && togglePreferencia(pref.id)"
+              (click)="pref.id && togglePreferencia(pref.id)"
               [color]="esPreferenciaActiva(pref.id) ? 'success' : 'medium'"
               mode="ios"
               class="preferencia-chip">
-
               {{ pref.nombrePreferencia }}
-
             </ion-chip>
           </div>
         </ion-card-content>

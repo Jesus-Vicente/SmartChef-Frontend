@@ -47,5 +47,13 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+
+	<key>NSCameraUsageDescription</key>
+      <string>Necesitamos acceso a la cámara para que puedas capturar las fotos de tus recetas.</string>
+      <key>NSPhotoLibraryAddUsageDescription</key>
+      <string>Necesitamos permiso para guardar las fotos que captures en tu galería.</string>
+      <key>NSPhotoLibraryUsageDescription</key>
+      <string>Necesitamos acceso a tu galería para que puedas seleccionar fotos de tus platos.</string>
+
 </dict>
 </plist>

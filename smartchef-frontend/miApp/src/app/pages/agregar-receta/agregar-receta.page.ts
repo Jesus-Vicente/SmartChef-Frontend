@@ -29,6 +29,8 @@ import {Router} from "@angular/router";
 import {IngredienteReceta} from "../../models/IngredienteReceta.model";
 import {PreferenciaService} from "../../services/preferencia.service";
 import {Preferencia} from "../../models/Preferencia.model";
+import {FotoService} from "../../services/foto.service";
+import {ActionSheetController} from "@ionic/angular";
 
 @Component({
   selector: 'app-agregar-receta',
@@ -40,6 +42,8 @@ import {Preferencia} from "../../models/Preferencia.model";
     IonSegment, IonSegmentButton, IonIcon, IonChip, IonSelectOption, IonSelect, IonFooter]
 })
 export class AgregarRecetaPage implements OnInit {
+
+  private fotoService = inject(FotoService);
 
   private recetaService = inject(RecetaService);
   protected recetas: Receta[] = [];
@@ -109,30 +113,41 @@ export class AgregarRecetaPage implements OnInit {
     idPreferencias: []
   };
 
+  private actionSheetController = inject(ActionSheetController);
+
   async abrirInputFoto() {
-    const alert = await this.alertController.create({
-      header: 'Enlazar Foto',
-      subHeader: 'Ingresa la URL de la imagen',
-      inputs: [
-        {
-          name: 'url',
-          type: 'url',
-          placeholder: 'URL de la foto',
-          value: this.formularioReceta.url_foto || ''
-        },
-      ],
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Seleccionar Imagen',
       buttons: [
-        { text: 'Cancelar', role: 'cancel' },
         {
-          text: 'Aplicar',
-          handler: (data: { url: string; }) => {
-            this.formularioReceta.url_foto = data.url.trim() || '';
-            console.log("SIMULACIÓN: URL de foto guardada.");
-          },
+          text: 'Usar Cámara',
+          icon: 'camera-outline',
+          handler: () => {
+            this.tomarFoto();
+          }
         },
-      ],
+        {
+          text: 'Pegar Enlace (URL)',
+          icon: 'link-outline',
+          handler: () => {
+            this.abrirInputFoto(); // Tu método actual que abre el alert
+          }
+        },
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        }
+      ]
     });
-    await alert.present();
+    await actionSheet.present();
+  }
+
+  async tomarFoto() {
+    const urlCapturada = await this.fotoService.takePhoto();
+    if (urlCapturada) {
+      this.formularioReceta.url_foto = urlCapturada;
+      console.log("Foto capturada con éxito:", urlCapturada);
+    }
   }
 
   eliminarFoto() {
