@@ -5,15 +5,12 @@ import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
   providedIn: 'root'
 })
 export class FotoService {
-  constructor() { }
-
   public async takePhoto() {
     const capturedPhoto = await Camera.getPhoto({
       resultType: CameraResultType.DataUrl,
       source: CameraSource.Camera,
-      quality: 90
+      quality: 40
     });
-
     return capturedPhoto.dataUrl;
   }
 }
